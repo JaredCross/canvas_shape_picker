@@ -1,0 +1,11 @@
+canvas {
+  border: 1px solid black;
+  float: left;
+}
+
+
+.options {
+  display: inline-block;
+  float: left;
+  width: auto;
+}

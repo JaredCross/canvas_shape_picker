@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Canvas Shape Picker</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <canvas id="canvas" width="600" height="600"></canvas>
+    <div.options>
+      <input type="text" name="width" id="width" placeholder="Width">
+      <input type="text" name="height" id="height" placeholder="Height">
+      <input type="color" name="color" id="color" value='#ffffff'>
+      <input type="button" id="rect" value="Make Rectangle">
+      <input type="hidden" id="wantRect" value="">
+      <input type="button" id="circ" value="Make Circle">
+      <input type="hidden" id="wantCirc" value="">
+      <input type="button" id="eraseRect" value="Erase Rectangles">
+      <input type="button" id="eraseCirc" value="Erase Circles">
+      <input type="button" id="randShapes" value="make ALL the shapes">
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
