@@ -95,6 +95,20 @@ eraseRect.addEventListener('click', function () {
       ctx.clearRect(r.x, r.y, r.height, r.width);
     }
   });
+
+  circleArray.forEach(function (c) {
+    var canvas = document.getElementById('canvas');
+    if (canvas.getContext) {
+      var ctx = canvas.getContext('2d');
+      ctx.beginPath();
+        ctx.arc(c.x, c.y, (c.radius), 0, 2 * Math.PI, false);
+        ctx.fillStyle = c.color;
+        ctx.fill();
+    }
+  });
+
+  rectangleArray=[];
+
 });
 
 var eraseCirc = document.querySelector('#eraseCirc');
@@ -109,6 +123,17 @@ eraseCirc.addEventListener('click', function () {
         ctx.fill();
     }
   });
+
+  rectangleArray.forEach(function (r) {
+    var canvas = document.getElementById('canvas');
+    if (canvas.getContext) {
+      var ctx = canvas.getContext('2d');
+      ctx.fillStyle = r.color;
+      ctx.fillRect(r.x, r.y, r.height, r.width);
+    }
+  });
+  circleArray=[];
+
 });
 
 var randColor = function() {
@@ -126,7 +151,7 @@ var randSize = function () {
 
 var randShapes = document.querySelector("#randShapes");
 randShapes.addEventListener('click', function () {
-  for(var i = 0; i < 200; i++) {
+  for(var i = 0; i < 150; i++) {
     var randomColor = 'rgb('+randColor()+','+randColor()+','+randColor()+')';
     if(randCoord() % 2 === 0) {
       rect = new Rectangle(randSize(), randSize(), randCoord(), randCoord(), randomColor);
@@ -136,4 +161,30 @@ randShapes.addEventListener('click', function () {
       drawC();
     }
   }
+  console.log('*******************');
+  console.log(rectangleArray.length);
+  console.log(circleArray.length);
+  console.log('*******************');
+});
+
+var allShapesColored = document.querySelector('#shapeColors');
+allShapesColored.addEventListener('click', function () {
+  circleArray.forEach(function (c) {
+    var canvas = document.getElementById('canvas');
+    if (canvas.getContext) {
+      var ctx = canvas.getContext('2d');
+      ctx.beginPath();
+        ctx.arc(c.x, c.y, (c.radius + 0.6), 0, 2 * Math.PI, false);
+        ctx.fillStyle = colorInput.value;
+        ctx.fill();
+    }
+  });
+
+  rectangleArray.forEach(function (r) {
+    if (canvas.getContext) {
+      var ctx = canvas.getContext('2d');
+      ctx.fillStyle = colorInput.value;
+      ctx.fillRect(r.x, r.y, r.height, r.width);
+    }
+  });
 });
