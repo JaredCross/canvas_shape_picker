@@ -1,8 +1,15 @@
 
 var colorInput = document.querySelector('#color');
-var color = colorInput.value;
 var rectangleArray = [];
 var circleArray = [];
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var heightInput = document.querySelector('#height');
+var widthInput = document.querySelector('#width');
+var canvasCoords = document.querySelector('#canvas');
+var shapeSelect = document.querySelector('.shape');
+
+
 
 function Shape(x, y, color) {
   this.color = color;
@@ -23,6 +30,16 @@ Rectangle.prototype.constructor = Rectangle;
 function Circle(height, x, y, color) {
   Shape.call(this, x, y, color);
   this.radius = (height/2);
+  this.speed = 2;
+  this.counter = 0;
+
+var signHelper = Math.floor(Math.random() * 2);
+
+if (signHelper == 1) {
+    this.sign = -1;
+} else {
+    this.sign = 1;
+}
   circleArray.push(this);
 }
 
@@ -30,18 +47,16 @@ Circle.prototype= new Shape();
 Circle.prototype.constructor = Circle;
 
 function drawR() {
-  var canvas = document.getElementById('canvas');
   if (canvas.getContext) {
-    var ctx = canvas.getContext('2d');
     ctx.fillStyle = rect.color;
     ctx.fillRect(rect.x, rect.y, rect.height, rect.width);
   }
 }
 
 function drawC() {
-  var canvas = document.getElementById('canvas');
+
   if (canvas.getContext) {
-    var ctx = canvas.getContext('2d');
+
     ctx.beginPath();
       ctx.arc(circ.x, circ.y, circ.radius, 0, 2 * Math.PI, false);
       ctx.fillStyle = circ.color;
@@ -50,23 +65,6 @@ function drawC() {
 }
 
 
-var heightInput = document.querySelector('#height');
-var widthInput = document.querySelector('#width');
-var canvasCoords = document.querySelector('#canvas');
-var wantRect = document.querySelector('#wantRect');
-var wantCirc = document.querySelector('#wantCirc');
-
-var rectButton = document.getElementById('rect');
-rectButton.addEventListener("click", function () {
-  wantRect.value = 'rect';
-  wantCirc.value = '';
-});
-
-var circButton = document.getElementById('circ');
-circButton.addEventListener("click", function () {
-  wantCirc.value = 'circ';
-  wantRect.value = '';
-});
 
 canvasCoords.addEventListener('click', function () {
   var x = event.x;
@@ -74,14 +72,17 @@ canvasCoords.addEventListener('click', function () {
   var colorInput = document.querySelector('#color');
   var color = colorInput.value;
 
-  if(wantRect.value === 'rect') {
+  if(shapeSelect.value === 'rectangle') {
     x = x - (heightInput.value/2);
     y = y - (widthInput.value/2);
     rect = new Rectangle(heightInput.value, widthInput.value, x, y, color);
     drawR();
-  } else if(wantCirc.value === 'circ') {
+  } else if(shapeSelect.value === 'circle') {
     circ = new Circle(heightInput.value, x, y, color);
     drawC();
+  } else if (shapeSelect.value === 'animCircle') {
+      circ = new AnimCircle(heightInput.value, x, y, color);
+      drawC();
   }
 
 });
@@ -89,17 +90,17 @@ canvasCoords.addEventListener('click', function () {
 var eraseRect = document.querySelector('#eraseRect');
 eraseRect.addEventListener('click', function () {
   rectangleArray.forEach(function (r) {
-    var canvas = document.getElementById('canvas');
+
     if (canvas.getContext) {
-      var ctx = canvas.getContext('2d');
+
       ctx.clearRect(r.x, r.y, r.height, r.width);
     }
   });
 
   circleArray.forEach(function (c) {
-    var canvas = document.getElementById('canvas');
+
     if (canvas.getContext) {
-      var ctx = canvas.getContext('2d');
+
       ctx.beginPath();
         ctx.arc(c.x, c.y, (c.radius), 0, 2 * Math.PI, false);
         ctx.fillStyle = c.color;
@@ -114,9 +115,9 @@ eraseRect.addEventListener('click', function () {
 var eraseCirc = document.querySelector('#eraseCirc');
 eraseCirc.addEventListener('click', function () {
   circleArray.forEach(function (c) {
-    var canvas = document.getElementById('canvas');
+
     if (canvas.getContext) {
-      var ctx = canvas.getContext('2d');
+
       ctx.beginPath();
         ctx.arc(c.x, c.y, (c.radius + 0.6), 0, 2 * Math.PI, false);
         ctx.fillStyle = '#ffffff';
@@ -125,9 +126,9 @@ eraseCirc.addEventListener('click', function () {
   });
 
   rectangleArray.forEach(function (r) {
-    var canvas = document.getElementById('canvas');
+
     if (canvas.getContext) {
-      var ctx = canvas.getContext('2d');
+
       ctx.fillStyle = r.color;
       ctx.fillRect(r.x, r.y, r.height, r.width);
     }
@@ -151,7 +152,7 @@ var randSize = function () {
 
 var randShapes = document.querySelector("#randShapes");
 randShapes.addEventListener('click', function () {
-  for(var i = 0; i < 150; i++) {
+  for(var i = 0; i < 10; i++) {
     var randomColor = 'rgb('+randColor()+','+randColor()+','+randColor()+')';
     if(randCoord() % 2 === 0) {
       rect = new Rectangle(randSize(), randSize(), randCoord(), randCoord(), randomColor);
@@ -167,24 +168,23 @@ randShapes.addEventListener('click', function () {
   console.log('*******************');
 });
 
-var allShapesColored = document.querySelector('#shapeColors');
-allShapesColored.addEventListener('click', function () {
-  circleArray.forEach(function (c) {
-    var canvas = document.getElementById('canvas');
-    if (canvas.getContext) {
-      var ctx = canvas.getContext('2d');
-      ctx.beginPath();
-        ctx.arc(c.x, c.y, (c.radius + 0.6), 0, 2 * Math.PI, false);
-        ctx.fillStyle = colorInput.value;
-        ctx.fill();
-    }
-  });
-
-  rectangleArray.forEach(function (r) {
-    if (canvas.getContext) {
-      var ctx = canvas.getContext('2d');
-      ctx.fillStyle = colorInput.value;
-      ctx.fillRect(r.x, r.y, r.height, r.width);
-    }
-  });
-});
+// var allShapesColored = document.querySelector('#shapeColors');
+// allShapesColored.addEventListener('click', function () {
+//   circleArray.forEach(function (c) {
+//
+//     if (canvas.getContext) {
+//       ctx.beginPath();
+//         ctx.arc(c.x, c.y, (c.radius + 0.6), 0, 2 * Math.PI, false);
+//         ctx.fillStyle = colorInput.value;
+//         ctx.fill();
+//     }
+//   });
+//
+//   rectangleArray.forEach(function (r) {
+//     if (canvas.getContext) {
+//       var ctx = canvas.getContext('2d');
+//       ctx.fillStyle = colorInput.value;
+//       ctx.fillRect(r.x, r.y, r.height, r.width);
+//     }
+//   });
+// });
