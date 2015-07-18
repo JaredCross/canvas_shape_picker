@@ -30,16 +30,7 @@ Rectangle.prototype.constructor = Rectangle;
 function Circle(height, x, y, color) {
   Shape.call(this, x, y, color);
   this.radius = (height/2);
-  this.speed = 2;
-  this.counter = 0;
 
-var signHelper = Math.floor(Math.random() * 2);
-
-if (signHelper == 1) {
-    this.sign = -1;
-} else {
-    this.sign = 1;
-}
   circleArray.push(this);
 }
 
@@ -56,7 +47,6 @@ function drawR() {
 function drawC() {
 
   if (canvas.getContext) {
-
     ctx.beginPath();
       ctx.arc(circ.x, circ.y, circ.radius, 0, 2 * Math.PI, false);
       ctx.fillStyle = circ.color;
@@ -81,6 +71,9 @@ canvasCoords.addEventListener('click', function () {
     circ = new Circle(heightInput.value, x, y, color);
     drawC();
   } else if (shapeSelect.value === 'animCircle') {
+      if (myReq) {
+        window.cancelAnimationFrame(myReq);
+      }
       circ = new AnimCircle(heightInput.value, x, y, color);
       drawC();
   }
